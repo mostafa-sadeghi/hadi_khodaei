@@ -66,7 +66,9 @@
 # myscore = 1000
 # message = 'My score is %s'%myscore
 # print(message)
-name = "sara"
-myscore = 1000
-message = '%s your score is %s'%(name,myscore)
-print(message)
+# name = "sara"
+# myscore = 1000
+# message = '%s your score is %s'%(name,myscore)
+# message = f'{name} your score is {myscore}'
+
+# print(message)
