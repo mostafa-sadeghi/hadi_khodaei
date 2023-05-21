@@ -130,13 +130,25 @@ x = 10
 # else:
 #     print("x is not less than 10")
 
-age = 8
+# age = 8
 
-if age < 8:
-    print("kid")
-elif 8 < age < 13:
-    print("junior")
-elif 13 < age < 18:
-    print("teenager")
-else:
-    print("adult")
+# if age < 8:
+#     print("kid")
+# elif 8 < age < 13:
+#     print("junior")
+# elif 13 < age < 18:
+#     print("teenager")
+# else:
+#     print("adult")
+
+
+#  برنامه ای بنویس که نمرات سه درس دانش آموز را از ورودی بگیرد و
+# در صورتی که معدلش بیشتر نود بود
+# A
+# بیشتر از هشتاد بود
+# B
+# بیشتر از هفتاد بود 
+# C
+
+# بیشتر از 60
+# D
