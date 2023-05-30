@@ -32,17 +32,22 @@ welcome to ML class.
 welcome to Neural Network class.
 welcome to JavaScript class.'''
 foreground_colors = (Fore.RED, Fore.BLUE, Fore.GREEN)
-background_colors = (Fore.WHITE, Fore.RED, Fore.MAGENTA)
+background_colors = (Back.WHITE, Back.RED, Back.MAGENTA)
 lines = []
 line = ''
-# for index, char in enumerate(message):
-#     line += char
-#     if char == '\n':
-#         lines.append(line[:-1])
-#         line = ''
-#     if index == len(message)-1:
-#         lines.append(line)
+for index, char in enumerate(message):
+    line += char
+    if char == '\n':
+        lines.append(line[:-1])
+        line = ''
+    if index == len(message)-1:
+        lines.append(line)
 # print(lines)
+for i in range(len(lines)):
+    print(foreground_colors[i % 3] + background_colors[i %
+          3] + lines[i] + Style.RESET_ALL)
+
+
 # for index, char in enumerate(message):
 #     line += char
 #     if char == '\n':
