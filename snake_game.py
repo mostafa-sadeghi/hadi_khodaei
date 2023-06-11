@@ -1,25 +1,8 @@
-from turtle import Screen, Turtle
+from turtle import Screen
 from time import sleep
-from random import randint
+from snake_game_utils import move_snake, make_turtle, change_turtle_object_position_in_random_place, reset
 
-
-def move_snake():
-    if snake_head.direction == "up":
-        snake_y_position = snake_head.ycor()
-        snake_y_position += 20
-        snake_head.sety(snake_y_position)
-    if snake_head.direction == "down":
-        snake_y_position = snake_head.ycor()
-        snake_y_position -= 20
-        snake_head.sety(snake_y_position)
-    if snake_head.direction == "right":
-        snake_x_position = snake_head.xcor()
-        snake_x_position += 20
-        snake_head.setx(snake_x_position)
-    if snake_head.direction == "left":
-        snake_x_position = snake_head.xcor()
-        snake_x_position -= 20
-        snake_head.setx(snake_x_position)
+# TODO بقیه توابع را به ماژول کمکی منتقل
 
 
 def go_up():
@@ -47,22 +30,12 @@ window.title("Snake Game")
 window.bgcolor("blue")
 window.setup(width=600, height=600)
 window.tracer(0)
-snake_head = Turtle()
-snake_head.shape("square")
-snake_head.speed("fastest")
-snake_head.penup()
+snake_head = make_turtle("square", "black")
 snake_head.direction = ""
 
-food = Turtle()
-food.speed("fastest")
-food.shape("circle")
+food = make_turtle("circle", "red")
 food.shapesize(0.4, 0.4)
-food.color("red")
-food.penup()
-food_x_start_position = randint(-300, 300)
-food_y_start_position = randint(-300, 300)
-food.goto(food_x_start_position, food_y_start_position)
-
+change_turtle_object_position_in_random_place(food)
 snake_body = []
 
 
@@ -73,18 +46,15 @@ window.onkeypress(go_right, 'Right')
 window.onkeypress(go_left, 'Left')
 
 
+
+
+
 running = True
 while running:
     window.update()
     if snake_head.distance(food) < 15:
-        food_x_position = randint(-300, 300)
-        food_y_position = randint(-300, 300)
-        food.goto(food_x_position, food_y_position)
-        new_tail = Turtle()
-        new_tail.shape("square")
-        new_tail.speed("fastest")
-        new_tail.penup()
-        new_tail.color("grey")
+        change_turtle_object_position_in_random_place(food)
+        new_tail = make_turtle("square", "grey")
         snake_body.append(new_tail)
 
     for i in range(len(snake_body) - 1, 0, -1):
@@ -97,16 +67,10 @@ while running:
         snake_last_head_y = snake_head.ycor()
         snake_body[0].goto(snake_last_head_x, snake_last_head_y)
 
-    move_snake()
+    if snake_head.xcor() > 290 or snake_head.xcor() < -290 or snake_head.ycor() > 290 or snake_head.ycor() < -290:
+        reset(snake_head, snake_body)
+
+    move_snake(snake_head)
+
+    # TODO چک کردن برخورد با بدن مار
     sleep(0.1)
-
-
-# def my_func(number):
-#    return number % 2 == 0
-
-# print(my_func(4))
-# def my_func(number):
-#    print(number % 2 == 0)
-#    return "balalalalal"
-
-# print(my_func(4))
