@@ -33,8 +33,9 @@ def make_turtle(turtle_shape, turtle_color):
 def change_turtle_object_position_in_random_place(turtle_object):
 
     x = randint(-270, 270)
-    y = randint(-270, 270)
+    y = randint(-270, 230)
     turtle_object.goto(x, y)
+
 
 def reset(snake_head, snake_body):
     snake_head.goto(0, 0)

@@ -5,6 +5,17 @@ from snake_game_utils import move_snake, make_turtle, change_turtle_object_posit
 # TODO بقیه توابع را به ماژول کمکی منتقل
 
 
+score = 0
+
+try:
+    with open("snake_result.txt", "r") as f:
+        high_score = int(f.read())
+
+except:
+
+    high_score = 0
+
+
 def go_up():
     if snake_head.direction != "down":
         snake_head.direction = "up"
@@ -36,6 +47,11 @@ snake_head.direction = ""
 food = make_turtle("circle", "red")
 food.shapesize(0.4, 0.4)
 change_turtle_object_position_in_random_place(food)
+
+score_board = make_turtle("square", "white")
+score_board.ht()
+score_board.goto(0, 260)
+
 snake_body = []
 
 
@@ -46,13 +62,26 @@ window.onkeypress(go_right, 'Right')
 window.onkeypress(go_left, 'Left')
 
 
+def on_close():
+    with open("snake_result.txt", "w") as f:
+        f.write(str(high_score))
+    global running
+    running = False
 
+
+root = window._root
+root.protocol("WM_DELETE_WINDOW", on_close)
 
 
 running = True
 while running:
     window.update()
+    score_board.clear()
+    score_board.write(f"Score: {score}, HighScore: {high_score}", font=("Terminal", 22), align="center")
     if snake_head.distance(food) < 15:
+        score += 1
+        if score > high_score:
+            high_score = score
         change_turtle_object_position_in_random_place(food)
         new_tail = make_turtle("square", "grey")
         snake_body.append(new_tail)
@@ -69,6 +98,7 @@ while running:
 
     if snake_head.xcor() > 290 or snake_head.xcor() < -290 or snake_head.ycor() > 290 or snake_head.ycor() < -290:
         reset(snake_head, snake_body)
+        score = 0
 
     move_snake(snake_head)
 

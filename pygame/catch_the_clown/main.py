@@ -9,18 +9,18 @@ FPS = 60
 clock = pygame.time.Clock()
 
 display_surface = pygame.display.set_mode((WINDOW_WIDTH,
-                                           WINDOW_HEIGHT))
+                                           WINDOW_HEIGHT)).convert_alpha()
 pygame.display.set_caption("Catch the Clown")
-display_surface.set_alpha(128)
-bg_image = pygame.image.load("background.png")
+
+bg_image = pygame.image.load("background.png").convert_alpha()
 bg_rect = bg_image.get_rect()
 bg_rect.topleft = (0, 0)
 
 
-red = pygame.Color(255, 255, 255)
+red = pygame.Color(255, 255, 255, 120)
 
 font = pygame.font.SysFont("Terminal", 64)
-my_text = font.render("Hello", True, red)
+my_text = font.render("Hello", True, (255, 0, 0), (255, 255, 255, 120))
 my_text_rect = my_text.get_rect()
 my_text_rect.center = (WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
@@ -56,3 +56,17 @@ while running:
     pygame.display.update()
     clock.tick(FPS)
 pygame.quit()
+
+
+# TODO
+
+# numbers = [1, 2, 7, 9, 3, 4]
+# مرتب سازی صعودی
+# مرتب سازی نزولی
+# sort    sorted    nested for
+
+# راهنمایی
+# numbers[0], numbers[1] = numbers[1], numbers[0]
+
+# products = [("productOne", 1000), ("productTwo", 200), ("productThree", 500)]
+# مرتب سازی صعودی بر اساس قیمت
