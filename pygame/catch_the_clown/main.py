@@ -91,25 +91,69 @@
 # assert my_func(3, 4) == 'black', "failure"
 
 
-message = "The sun"
-old_text = "sun"
-new_text = "moon"
+# message = "The sun"
+# old_text = "sun"
+# new_text = "moon"
 
-print(message.replace(old_text, new_text))
+# print(message.replace(old_text, new_text))
 
-message = "The sun is very nice. i like the sun"
-old_text = "sun"
-new_text = "moon"
-print(message.replace(old_text, new_text))
-
-
-def my_replace(text, old_text, new_text):
-    """
-    while
-    if
-    else
-    slicing
+# message = "The sun is very nice. i like the sun"
+# old_text = "sun"
+# new_text = "moon"
+# print(message.replace(old_text, new_text))
 
 
-    """
-    pass
+# def my_replace(text, old_text, new_text):
+#     res = ""
+#     i = 0
+#     while i < len(text):
+#         if text[i:i+len(old_text)] == old_text:
+#             res += new_text
+#             i += len(old_text)
+#         else:
+#             res += text[i]
+#             i+=1
+
+#     return res
+
+
+# print(my_replace("the sun is nice", "sun", "moon"))
+
+
+# def get_time(seconds):
+#     pass
+
+
+# """
+# 30      =>      30s
+# 60      =>      1m
+# 61      =>      1m 1s
+# 3600    =>      1h
+# 3601    =>      1h 1s
+
+
+# """
+
+
+"""
+تابعی بنویس که لیستی از اعدا را بگیرد و کوچکترین و نیز بزرگترین را برگرداند
+تابعی بنویس که لیستی از اعدا را بگیرد و عدد میانه یا وسط را برگرداند
+[1,3,2,4,6,7,8,5,9] => 5
+
+تابعی بنویس که لیستی از اعداد را بگیرد و عدد پرتکرار را برگرداند یعنی عددی که بیشتر از همه تکرار شده است
+
+
+"""
+
+
+# import random
+
+
+# def rollDice(num):
+#     total = 0
+#     for i in range(num):
+#         total += random.randint(1, 6)
+
+#     return total
+
+# print(rollDice(1000))
