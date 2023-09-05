@@ -64,4 +64,29 @@ class Game:
                              self.target_monster_rect)
 
     def check_collisions(self):
-        pass
+        collided_monster = pygame.sprite.spritecollideany(self.player, self.monster_group)
+        """
+        check if player collides with target => add score
+        if collides with wrong monsters => decrese the lives
+        """
+
+    def start_new_round(self):
+        """starts a new round
+           update the score base of round_number
+           reset round values
+
+           for first round => 4 monsters  1 * 4
+           for second round => 8 monsters 2 * 4
+           for third round => 12 monsters 3 * 4
+
+
+            for i in range():
+                self.monster_group.add(Monster())
+                self.monster_group.add(Monster())
+                self.monster_group.add(Monster())
+                self.monster_group.add(Monster())
+
+
+            
+
+        """

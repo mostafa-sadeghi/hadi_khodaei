@@ -20,7 +20,7 @@ my_player_group.add(player)
 monster_group = pygame.sprite.Group()
 
 game = Game(player, monster_group)
-
+game.start_new_round()
 
 running = True
 while running:
