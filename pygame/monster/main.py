@@ -3,7 +3,7 @@ import random
 from pygame.sprite import Sprite
 import pygame
 from game import Game
-from player import Player
+from space.player import Player
 from config import WIN_WIDTH, WIN_HEIGHT
 
 pygame.init()
