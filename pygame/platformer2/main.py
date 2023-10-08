@@ -27,10 +27,10 @@ while running:
 
     screen.blit(sky_img, (0, 0))
     screen.blit(sun_img, (100, 100))
- 
+
     word.draw(screen)
     draw_grid(screen)
-    player.update(screen)
+    player.update(screen, word.tile_list)
 
     pygame.display.update()
     clock.tick(FPS)
