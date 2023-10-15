@@ -1,5 +1,7 @@
 import pygame
 from constants import *
+from enemy import Enemy
+from lava import Lava
 
 
 def draw_grid(screen):
@@ -11,8 +13,10 @@ def draw_grid(screen):
 
 
 class World:
-    def __init__(self, data) -> None:
+    def __init__(self, data, blob_group, lava_group) -> None:
         self.tile_list = []
+        self.blob_group = blob_group
+        self.lava_group = lava_group
         dirt_img = pygame.image.load("img\dirt.png")
         grass_img = pygame.image.load("img\grass.png")
         for row_index, row in enumerate(data):
@@ -33,6 +37,15 @@ class World:
                     img_rect.y = row_index * TILE_SIZE
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+
+                if tile == 3:
+                    blob = Enemy(col_index * TILE_SIZE,
+                                 row_index * TILE_SIZE + 16)
+                    self.blob_group.add(blob)
+                if tile == 6:
+                    lava = Lava(col_index * TILE_SIZE,
+                                row_index * TILE_SIZE)
+                    self.lava_group.add(lava)
 
     def draw(self, screen):
         for tile in self.tile_list:
