@@ -1,3 +1,6 @@
+import pygame
+
+
 class Button:
     def __init__(self, x, y, image):
         self.image = image
@@ -8,6 +11,11 @@ class Button:
 
     def draw(self, screen):
 
-        # TODO add action to the button
+        action = False
+        pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0]:
+                action = True
 
         screen.blit(self.image, self.rect)
+        return action

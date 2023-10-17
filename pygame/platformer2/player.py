@@ -4,13 +4,17 @@ from constants import *
 
 
 class Player:
-    def __init__(self, x, y, blob_group, lava_group):
+    def __init__(self, x, y, blob_group, lava_group, exit_group):
 
+        self.reset(x, y, blob_group, lava_group, exit_group)
+
+    def reset(self, x, y, blob_group, lava_group, exit_group):
         self.images_right = []
         self.images_left = []
         self.index = 0
         self.blob_group = blob_group
         self.lava_group = lava_group
+        self.exit_group = exit_group
         for i in range(1, 5):
             img = pygame.image.load(f'img\guy{i}.png')
             img_right = pygame.transform.scale(img, (40, 80))
