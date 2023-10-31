@@ -2,6 +2,8 @@ import pygame
 from pygame.sprite import Sprite
 import math
 
+from enemy import Enemy
+
 pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -36,7 +38,10 @@ for enemy in enemy_types:
         animation_list.append(temp_list)
     enemy_animations.append(animation_list)
 
-print(enemy_animations)
+enemy_group = pygame.sprite.Group()
+
+enemy1 = Enemy(enemy_health[0], enemy_animations[0], 200, 500, 1)
+enemy_group.add(enemy1)
 
 
 class Castle:
@@ -49,6 +54,8 @@ class Castle:
         self.rect = self.image100.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.money = 1000
+        self.score = 0
 
     def draw(self):
         self.image = self.image100
@@ -90,6 +97,8 @@ class Bullet(Sprite):
 
 
 castle = Castle(castle_100, SCREEN_WIDTH - 250, SCREEN_HEIGHT - 300, 0.2)
+
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -101,5 +110,7 @@ while running:
     castle.draw()
     bullet_group.update()
     bullet_group.draw(screen)
+    enemy_group.update(castle, bullet_group)
+    enemy_group.draw(screen)
     pygame.display.update()
     clock.tick(FPS)
