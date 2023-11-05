@@ -13,6 +13,9 @@ class Enemy(Sprite):
         self.action = 0
         self.frame_index = 0
 
+        self.attack_cooldown = 1000
+        self.last_attack = pygame.time.get_ticks()
+
         self.update_time = pygame.time.get_ticks()
 
         self.image = self.animation_list[self.action][self.frame_index]
@@ -35,6 +38,15 @@ class Enemy(Sprite):
 
             if self.action == 0:
                 self.rect.x += self.speed
+
+            if self.action == 1:
+                if pygame.time.get_ticks() - self.last_attack > self.attack_cooldown:
+                    target.health -= 25
+                    self.last_attack = pygame.time.get_ticks()
+                    if target.health < 0:
+                        target.health = 0
+
+               
 
         self.update_animation()
 
