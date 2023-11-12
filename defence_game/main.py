@@ -2,6 +2,7 @@ import random
 import pygame
 from pygame.sprite import Sprite
 import math
+from button import Button
 
 from enemy import Enemy
 
@@ -11,12 +12,21 @@ SCREEN_HEIGHT = 600
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+font = pygame.font.SysFont('FiraCode', 32)
+font60 = pygame.font.SysFont('FiraCode', 60)
+
+
 clock = pygame.time.Clock()
 FPS = 60
 
 level = 1
 level_difficulty = 0
 target_difficulty = 1000
+DIFFICULTY_MULTIPLIER = 1.1
+game_over = False
+next_level = False
+
+
 enemies_alive = 0
 last_enemy = pygame.time.get_ticks()
 
@@ -26,6 +36,11 @@ castle_100 = pygame.image.load("assets/castle/castle_100.png")
 castle_50 = pygame.image.load("assets/castle/castle_50.png")
 castle_25 = pygame.image.load("assets/castle/castle_25.png")
 bullet_img = pygame.image.load("assets/bullet.png")
+
+repair_img = pygame.image.load("assets/repair.png")
+armour_img = pygame.image.load("assets/armour.png")
+
+
 # TODO change bullet size if is not good
 bullet_img = pygame.transform.scale(bullet_img, (10, 10))
 bullet_group = pygame.sprite.Group()
@@ -78,13 +93,13 @@ class Castle:
 
         screen.blit(self.image, self.rect)
 
-    def shoot(self):
+    def shoot(self, action):
         pos = pygame.mouse.get_pos()
         x_dist = pos[0] - self.rect.midleft[0]
         y_dist = -(pos[1] - self.rect.midleft[1])
         self.angle = math.atan2(y_dist, x_dist)
         # pygame.draw.line(screen, (255, 255, 255), self.rect.midleft, pos)
-        if pygame.mouse.get_pressed()[0] and not self.fired:
+        if pygame.mouse.get_pressed()[0] and not self.fired and not action:
             self.fired = True
             bullet = Bullet(
                 bullet_img, self.rect.midleft[0], self.rect.midleft[1], self.angle)
@@ -116,6 +131,23 @@ class Bullet(Sprite):
 castle = Castle(castle_100, castle_50, castle_25,
                 SCREEN_WIDTH - 250, SCREEN_HEIGHT - 300, 0.2)
 
+repair_button = Button(SCREEN_WIDTH - 220, 10, pygame.transform.scale(repair_img, (30,30)))
+
+
+
+def draw_text(text, font, color, x,y):
+    text = font.render(text, True, color)
+    screen.blit(text, (x,y))
+
+
+def show_info():
+    draw_text(f'Money:{castle.money}', font, (255,255,255), 10,10)
+    draw_text(f'Score:{castle.money}', font, (10,10,40), 10,40)
+    draw_text(f'Score:{level}', font, (10,10,40), SCREEN_WIDTH/2,10)
+    draw_text(f'Health:{castle.health}', font, (10,10,40), SCREEN_WIDTH-230,SCREEN_HEIGHT-50)
+
+
+
 
 class Crosshair:
     def __init__(self, scale):
@@ -134,10 +166,15 @@ class Crosshair:
 crosshair = Crosshair(0.03)
 
 running = True
+action = False
 while running:
+    screen.blit(bg, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    action = repair_button.draw(screen)
+
 
     if level_difficulty < target_difficulty:
         if pygame.time.get_ticks() - last_enemy > 1000:
@@ -154,10 +191,22 @@ while running:
             if enemy.alive:
                 enemies_alive += 1
 
-        # TODO  ################################################################
+        if enemies_alive == 0 and not next_level:
+            level_reset_time = pygame.time.get_ticks()
+            next_level = True
+    if next_level == True:
+        draw_text('LEVEL COMPLETE...', font60, (255,255,255),200,300)
+        if pygame.time.get_ticks() - level_reset_time > 1500:
+            next_level = False        
+            level_difficulty = 0
+            target_difficulty *= DIFFICULTY_MULTIPLIER
+            enemy_group.empty()
+            level += 1
 
-    screen.blit(bg, (0, 0))
-    castle.shoot()
+
+    show_info()
+    repair_button.draw(screen)
+    castle.shoot(action)
     castle.draw()
     bullet_group.update()
     bullet_group.draw(screen)
