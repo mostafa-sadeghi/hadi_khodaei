@@ -99,7 +99,7 @@ class Castle:
         y_dist = -(pos[1] - self.rect.midleft[1])
         self.angle = math.atan2(y_dist, x_dist)
         # pygame.draw.line(screen, (255, 255, 255), self.rect.midleft, pos)
-        if pygame.mouse.get_pressed()[0] and not self.fired and not action:
+        if pygame.mouse.get_pressed()[0] and not self.fired and (not action['repair_button'] or not action['armour_button']):
             self.fired = True
             bullet = Bullet(
                 bullet_img, self.rect.midleft[0], self.rect.midleft[1], self.angle)
@@ -107,6 +107,40 @@ class Castle:
             bullet_group.add(bullet)
         if not pygame.mouse.get_pressed()[0]:
             self.fired = False
+
+
+    def repair(self):
+        if self.money >= 1000 and self.health < self.max_health:
+            self.health += 500
+            self.money -= 1000
+            if castle.health > castle.max_health:
+                castle.health = castle.max_health
+
+    def armour(self):
+        if self.money >= 500:
+            self.max_health += 250
+            self.money -= 500
+
+
+
+class Tower(Sprite):
+    def __init__(self, image100, image50, image25, x, y, scale):
+        self.image100 = pygame.transform.scale(
+            image100, (image100.get_width()*scale, image100.get_height()*scale))
+        self.image50 = pygame.transform.scale(
+            image50, (image50.get_width()*scale, image50.get_height()*scale))
+        self.image25 = pygame.transform.scale(
+            image25, (image25.get_width()*scale, image25.get_height()*scale))
+        self.image = self.image100
+        self.rect = self.image100.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self, enemy_group):
+        pass
+
+
+
 
 
 class Bullet(Sprite):
@@ -132,6 +166,7 @@ castle = Castle(castle_100, castle_50, castle_25,
                 SCREEN_WIDTH - 250, SCREEN_HEIGHT - 300, 0.2)
 
 repair_button = Button(SCREEN_WIDTH - 220, 10, pygame.transform.scale(repair_img, (30,30)))
+armour_button = Button(SCREEN_WIDTH - 80, 10, pygame.transform.scale(armour_img, (30,30)))
 
 
 
@@ -166,14 +201,29 @@ class Crosshair:
 crosshair = Crosshair(0.03)
 
 running = True
-action = False
+action = {
+'repair_button':True,
+'armour_button':True,
+}
 while running:
     screen.blit(bg, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    action = repair_button.draw(screen)
+    if repair_button.draw(screen):
+        action['repair_button'] = True
+        
+        castle.repair()
+    else:
+        action['repair_button'] = False
+    
+    
+    if armour_button.draw(screen):
+        action['armour_button'] = True
+        action['repair_button'] = True
+        print("inside")
+        castle.armour()
 
 
     if level_difficulty < target_difficulty:
@@ -205,7 +255,7 @@ while running:
 
 
     show_info()
-    repair_button.draw(screen)
+    
     castle.shoot(action)
     castle.draw()
     bullet_group.update()
