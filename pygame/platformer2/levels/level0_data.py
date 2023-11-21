@@ -12,3 +12,7 @@ world_data = [
     [1, 0, 0, 2, 6, 6, 6, 6, 6, 1, 1, 1],
     [1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
+from get_abs_path import  resource_path
+import pickle
+with open(resource_path("levels/level_0"), "wb") as f:
+    pickle.dump(world_data, f)

@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from constants import *
-
+from get_abs_path import resource_path
 
 class Player:
     def __init__(self, x, y, blob_group, lava_group, exit_group):
@@ -16,14 +16,14 @@ class Player:
         self.lava_group = lava_group
         self.exit_group = exit_group
         for i in range(1, 5):
-            img = pygame.image.load(f'img\guy{i}.png')
+            img = pygame.image.load(resource_path(f'img\guy{i}.png'))
             img_right = pygame.transform.scale(img, (40, 80))
             img_left = pygame.transform.flip(img_right, True, False)
             self.images_right.append(img_right)
             self.images_left.append(img_left)
 
         self.image = self.images_right[self.index]
-        self.dead_image = pygame.image.load("img/ghost.png")
+        self.dead_image = pygame.image.load(resource_path("img/ghost.png"))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y

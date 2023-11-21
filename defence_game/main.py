@@ -26,6 +26,17 @@ DIFFICULTY_MULTIPLIER = 1.1
 game_over = False
 next_level = False
 
+max_towers = 4
+TOWER_COST = 100
+tower_position = [
+    (SCREEN_WIDTH - 250, SCREEN_HEIGHT - 200),
+    (SCREEN_WIDTH - 200, SCREEN_HEIGHT - 150),
+    (SCREEN_WIDTH - 150, SCREEN_HEIGHT - 150),
+    (SCREEN_WIDTH - 100, SCREEN_HEIGHT - 150),
+]
+
+
+
 
 enemies_alive = 0
 last_enemy = pygame.time.get_ticks()
@@ -39,6 +50,11 @@ bullet_img = pygame.image.load("assets/bullet.png")
 
 repair_img = pygame.image.load("assets/repair.png")
 armour_img = pygame.image.load("assets/armour.png")
+
+
+tower_100 = pygame.image.load("assets/tower/tower_100.png")
+tower_50 = pygame.image.load("assets/tower/tower_50.png")
+tower_25 = pygame.image.load("assets/tower/tower_25.png")
 
 
 # TODO change bullet size if is not good
@@ -64,6 +80,7 @@ for enemy in enemy_types:
     enemy_animations.append(animation_list)
 
 enemy_group = pygame.sprite.Group()
+tower_group = pygame.sprite.Group()
 
 
 class Castle:
@@ -125,6 +142,7 @@ class Castle:
 
 class Tower(Sprite):
     def __init__(self, image100, image50, image25, x, y, scale):
+        super().__init__()
         self.image100 = pygame.transform.scale(
             image100, (image100.get_width()*scale, image100.get_height()*scale))
         self.image50 = pygame.transform.scale(
@@ -135,9 +153,32 @@ class Tower(Sprite):
         self.rect = self.image100.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.last_shot = pygame.time.get_ticks()
 
     def update(self, enemy_group):
-        pass
+        self.got_target = False
+        for enemy in enemy_group:
+            if enemy.alive:
+                target_x, target_y = enemy.rect.midbottom
+                self.got_target = True
+                break
+        if self.got_target:
+            x_dist = target_x - self.rect.midleft[0]
+            y_dist = -(target_y - self.rect.midleft[1])
+            self.angle = math.atan2(y_dist, x_dist)
+            if pygame.time.get_ticks() - self.last_shot > 1000:
+                bullet = Bullet(bullet_img, self.rect.midleft[0], self.rect.midleft[1], self.angle)
+                bullet_group.add(bullet)
+                self.last_shot = pygame.time.get_ticks()
+
+        if castle.health <= 250:
+            self.image = self.image25
+        elif castle.health <= 500:
+            self.image = self.image50
+        else:
+            self.image = self.image100
+
+
 
 
 
@@ -167,6 +208,7 @@ castle = Castle(castle_100, castle_50, castle_25,
 
 repair_button = Button(SCREEN_WIDTH - 220, 10, pygame.transform.scale(repair_img, (30,30)))
 armour_button = Button(SCREEN_WIDTH - 80, 10, pygame.transform.scale(armour_img, (30,30)))
+tower_button = Button(SCREEN_WIDTH - 140, 10, pygame.transform.scale(tower_100, (30,30)))
 
 
 
@@ -205,6 +247,7 @@ action = {
 'repair_button':True,
 'armour_button':True,
 }
+
 while running:
     screen.blit(bg, (0, 0))
     for event in pygame.event.get():
@@ -224,7 +267,12 @@ while running:
         action['repair_button'] = True
         print("inside")
         castle.armour()
-
+    if tower_button.draw(screen):
+        if castle.money >= TOWER_COST and len(tower_group) < max_towers:
+            print("inside  if tower_button.draw")
+            tower = Tower(tower_100, tower_50, tower_25,tower_position[len(tower_group)][0], tower_position[len(tower_group)][1], 0.2)
+            tower_group.add(tower)
+            castle.money -= TOWER_COST
 
     if level_difficulty < target_difficulty:
         if pygame.time.get_ticks() - last_enemy > 1000:
@@ -260,8 +308,13 @@ while running:
     castle.draw()
     bullet_group.update()
     bullet_group.draw(screen)
-    enemy_group.update(castle, bullet_group)
+    if len(tower_group):
+        enemy_group.update(tower_group.sprites()[-1], bullet_group)
+    else:
+        enemy_group.update(castle, bullet_group)
     enemy_group.draw(screen)
+    tower_group.update(enemy_group)
+    tower_group.draw(screen)
     crosshair.draw()
     pygame.display.update()
     clock.tick(FPS)

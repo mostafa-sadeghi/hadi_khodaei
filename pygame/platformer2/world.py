@@ -3,7 +3,7 @@ from constants import *
 from door import Door
 from enemy import Enemy
 from lava import Lava
-
+from get_abs_path import resource_path
 
 def draw_grid(screen):
     for line in range(12):
@@ -19,8 +19,8 @@ class World:
         self.blob_group = blob_group
         self.lava_group = lava_group
         self.exit_button = exit_group
-        dirt_img = pygame.image.load("img\dirt.png")
-        grass_img = pygame.image.load("img\grass.png")
+        dirt_img = pygame.image.load(resource_path("img\dirt.png"))
+        grass_img = pygame.image.load(resource_path("img\grass.png"))
         for row_index, row in enumerate(data):
             for col_index, tile in enumerate(row):
                 if tile == 1:

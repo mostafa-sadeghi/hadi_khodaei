@@ -5,6 +5,9 @@ from constants import *
 from world import draw_grid, World
 from levels.level0_data import world_data
 from player import Player
+import pickle
+
+from get_abs_path import resource_path
 
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -12,12 +15,12 @@ screen2 = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
 main_menu = True
 pygame.init()
-sun_img = pygame.image.load("img\sun.png")
-sky_img = pygame.image.load("img\sky.png")
-restart_img = pygame.image.load("img/restart_btn.png")
-start_img = pygame.image.load("img/start_btn.png")
+sun_img = pygame.image.load(resource_path("img\sun.png"))
+sky_img = pygame.image.load(resource_path("img\sky.png"))
+restart_img = pygame.image.load(resource_path("img/restart_btn.png"))
+start_img = pygame.image.load(resource_path("img/start_btn.png"))
 start_img = pygame.transform.scale(start_img, (120, 42))
-exit_img = pygame.image.load("img/exit_btn.png")
+exit_img = pygame.image.load(resource_path("img/exit_btn.png"))
 exit_img = pygame.transform.scale(exit_img, (120, 42))
 
 blob_group = pygame.sprite.Group()
@@ -33,6 +36,9 @@ exit_button = Button(WINDOW_WIDTH/2 + 70, WINDOW_HEIGHT/2, exit_img)
 
 word = World(world_data, blob_group, lava_group, exit_group)
 game_over = 0
+
+
+
 running = True
 while running:
     for event in pygame.event.get():
