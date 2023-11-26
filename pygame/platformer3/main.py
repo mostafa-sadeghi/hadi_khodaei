@@ -1,16 +1,39 @@
-# This is a sample Python script.
+import pygame
+from constants import *
+from soldier import Soldier, Enemy
+from world import World
+pygame.init()
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+clock = pygame.time.Clock()
+
+player = Soldier('player',200,200, 3, 5)
+enemy = Enemy('enemy',500,200, 3, 5)
+world = World()
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player.moving_left = True
+            if event.key == pygame.K_RIGHT:
+                player.moving_right = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                player.moving_left = False
+            if event.key == pygame.K_RIGHT:
+                player.moving_right = False
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    
+    world.draw_bg(screen)
+    player.move()
+    player.draw(screen)
+    enemy.draw(screen)
+    pygame.display.update()
+    clock.tick(FPS)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
