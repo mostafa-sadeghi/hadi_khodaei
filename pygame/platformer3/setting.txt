@@ -1,0 +1,24 @@
+{
+    "workbench.editorAssociations": {
+        "*.xlsx": "default"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none",
+    "editor.codeActionsOnSave": {},
+    "editor.fontFamily": "Fira Code, Consolas, 'Courier New', monospace",
+    "workbench.colorTheme": "GitHub Dark Default",
+    "workbench.settings.applyToAllProfiles": [
+        "editor.fontFamily"
+    ],
+    "editor.wordWrap": "off",
+    "editor.fontLigatures": false,
+    "editor.wordWrapColumn": 0,
+    "files.autoSave": "afterDelay",
+    "editor.formatOnSave": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontSize": 16,
+    "window.zoomLevel": 1
+}

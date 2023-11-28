@@ -22,16 +22,25 @@ while running:
                 player.moving_left = True
             if event.key == pygame.K_RIGHT:
                 player.moving_right = True
+            if event.key == pygame.K_SPACE:
+                player.jump = True
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 player.moving_left = False
             if event.key == pygame.K_RIGHT:
                 player.moving_right = False
-
-
+    if player.alive:
+        if player.in_air:
+            player.update_action(2)
+        elif player.moving_left or player.moving_right:
+            player.update_action(1)
+        else:
+            player.update_action(0)
     
     world.draw_bg(screen)
     player.move()
+    player.update_animation()
     player.draw(screen)
     enemy.draw(screen)
     pygame.display.update()
