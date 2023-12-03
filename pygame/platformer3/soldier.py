@@ -2,11 +2,14 @@ import os
 from pygame.sprite import Sprite
 import pygame
 
+from bullet import Bullet
+
 
 class Soldier(Sprite):
-    def __init__(self,char_type, x,y, scale,speed):
+    def __init__(self,char_type, x,y, scale,speed, bullet_group):
         super().__init__()
         self.alive = True
+        self.bullet_group = bullet_group
         self.char_type = char_type
         self.speed = speed
         self.direction = 1
@@ -19,6 +22,9 @@ class Soldier(Sprite):
         self.frame_index = 0
         self.action = 0
         self.vel_y = 0
+        self.ammo = 10
+        self.shooting = False
+        self.shoot_cooldown = 20
         self.update_time = pygame.time.get_ticks()
         animation_types = ['Idle', 'Run','Jump','Death']
         for animation in animation_types:
@@ -80,10 +86,21 @@ class Soldier(Sprite):
             self.update_time = pygame.time.get_ticks()
     
     
+    def shoot(self):
+        if self.shoot_cooldown >0:
+            self.shoot_cooldown -= 1
+        if self.shoot_cooldown == 0 and self.ammo > 0:
+            self.shoot_cooldown = 20
+            bullet = Bullet(self.rect.centerx + self.image.get_width(), self.rect.centery, self.direction)
+            self.bullet_group.add(bullet)
+            self.ammo -= 1
+
+
+
     def draw(self,screen):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
   
 class Enemy(Soldier):
-    def __init__(self, char_type, x, y, scale, speed):
-        super().__init__(char_type, x, y, scale, speed)
+    def __init__(self, char_type, x, y, scale, speed, bullet_group):
+        super().__init__(char_type, x, y, scale, speed,bullet_group)
