@@ -10,8 +10,8 @@ clock = pygame.time.Clock()
 player_bullet_group = pygame.sprite.Group()
 enemy_bullet_group = pygame.sprite.Group()
 
-player = Soldier('player',200,200, 3, 5,player_bullet_group)
-enemy = Enemy('enemy',500,200, 3, 5,enemy_bullet_group)
+player = Soldier('player',200,200, 3, 5,10,player_bullet_group)
+enemy = Enemy('enemy',500,200, 3, 5,5,enemy_bullet_group)
 world = World()
 
 
@@ -40,8 +40,7 @@ while running:
                 player.shooting = False
     if player.alive:
         if player.shooting:
-            print("player shooting")
-            player.shoot()
+            player.shoot(enemy)
         if player.in_air:
             player.update_action(2)
         elif player.moving_left or player.moving_right:
@@ -54,6 +53,7 @@ while running:
     player_bullet_group.draw(screen)
     player.move()
     player.update_animation()
+    enemy.update_animation()
     player.draw(screen)
     enemy.draw(screen)
     pygame.display.update()

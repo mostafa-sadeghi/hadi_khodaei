@@ -6,7 +6,7 @@ from bullet import Bullet
 
 
 class Soldier(Sprite):
-    def __init__(self,char_type, x,y, scale,speed, bullet_group):
+    def __init__(self,char_type, x,y, scale,speed,ammo, bullet_group):
         super().__init__()
         self.alive = True
         self.bullet_group = bullet_group
@@ -22,7 +22,10 @@ class Soldier(Sprite):
         self.frame_index = 0
         self.action = 0
         self.vel_y = 0
-        self.ammo = 10
+        self.ammo = ammo
+        self.start_ammo = ammo
+        self.health = 100
+        self.max_health = self.health
         self.shooting = False
         self.shoot_cooldown = 20
         self.update_time = pygame.time.get_ticks()
@@ -76,7 +79,12 @@ class Soldier(Sprite):
             self.frame_index += 1
 
         if self.frame_index >= len(self.animation_list[self.action]):
-            self.frame_index = 0
+            if self.action == 3:
+                self.frame_index = len(self.animation_list[self.action])-1
+            else:
+                self.frame_index = 0
+        
+        self.check_alive()
 
 
     def update_action(self, new_action):
@@ -86,14 +94,21 @@ class Soldier(Sprite):
             self.update_time = pygame.time.get_ticks()
     
     
-    def shoot(self):
+    def shoot(self, enemy):
         if self.shoot_cooldown >0:
             self.shoot_cooldown -= 1
         if self.shoot_cooldown == 0 and self.ammo > 0:
             self.shoot_cooldown = 20
-            bullet = Bullet(self.rect.centerx + self.image.get_width(), self.rect.centery, self.direction)
+            bullet = Bullet(self.rect.centerx + self.image.get_width(), self.rect.centery, self.direction, self, enemy)
             self.bullet_group.add(bullet)
             self.ammo -= 1
+
+    def check_alive(self):
+        if self.health <= 0:
+            self.health = 0
+            self.speed = 0 
+            self.alive = False
+            self.update_action(3)
 
 
 
@@ -102,5 +117,5 @@ class Soldier(Sprite):
 
   
 class Enemy(Soldier):
-    def __init__(self, char_type, x, y, scale, speed, bullet_group):
-        super().__init__(char_type, x, y, scale, speed,bullet_group)
+    def __init__(self, char_type, x, y, scale, speed,ammo, bullet_group):
+        super().__init__(char_type, x, y, scale, speed,ammo,bullet_group)
